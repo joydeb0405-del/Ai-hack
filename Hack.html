@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<title>VIP DRK ULTIMATE GRAPHICS</title>
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon-blue: #00f3ff;
+  --neon-purple: #bc13fe;
+  --neon-green: #0aff0a;
+  --neon-red: #ff0000;
+  --gold: #ffd700;
+  --bg-dark: #000;
+}
+
+body { margin: 0; background: var(--bg-dark); color: #fff; font-family: 'Orbitron', sans-serif; overflow: hidden; }
+
+/* --- CRT MONITOR EFFECT (OVERLAY) --- */
+body::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 9999;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+/* --- 1. START SCREEN & FULL SCREEN TERMINAL --- */
+#startScreen {
+  position: fixed; inset: 0; z-index: 5000;
+  background: radial-gradient(circle, #0b0000 0%, #000 90%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+#canvas-start { position: absolute; inset: 0; z-index: 1; opacity: 0.8; }
+
+.start-ui { z-index: 10; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+
+/* GLITCH TITLE ANIMATION */
+.hack-title {
+  font-size: 42px; font-weight: 900; letter-spacing: 4px;
+  color: #fff;
+  text-shadow: 2px 2px var(--neon-red), -2px -2px var(--neon-blue);
+  margin-bottom: 30px;
+  position: relative; z-index: 20;
+  animation: glitchMain 2s infinite;
+}
+
+@keyframes glitchMain {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.init-btn {
+  background: rgba(0, 0, 0, 0.6); color: var(--neon-red);
+  border: 2px solid var(--neon-red); padding: 15px 50px;
+  font-size: 18px; font-family: 'Share Tech Mono'; letter-spacing: 2px;
+  cursor: pointer; position: relative; overflow: hidden;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); transition: 0.3s;
+  z-index: 20;
+  clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+}
+.init-btn:hover { 
+  background: var(--neon-red); color: #000; 
+  box-shadow: 0 0 60px var(--neon-red); 
+  transform: scale(1.05);
+}
+
+/* FULL SCREEN LOG BOX */
+.log-box {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Slight tint to read text over stars */
+  padding: 20px; 
+  font-family: 'Share Tech Mono', monospace; 
+  font-size: 14px; font-weight: bold;
+  text-align: left; 
+  display: none; 
+  flex-direction: column; 
+  justify-content: flex-end; 
+  z-index: 5;
+  text-shadow: 2px 2px 0px #000; /* Heavy shadow for readability */
+  pointer-events: none;
+}
+.log-line { margin: 2px 0; white-space: nowrap; }
+.c-red { color: #ff3131; }
+.c-blue { color: #00f3ff; }
+.c-green { color: #0aff0a; }
+.c-purple { color: #bc13fe; }
+
+/* --- 2. GHOST INTRO LAYER --- */
+#intro-layer {
+  position: fixed; inset: 0; z-index: 4500;
+  background: #000; display: none;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.intro-text { font-size: 36px; text-align: center; opacity: 0; transition: opacity 0.5s; width: 90%; line-height: 1.2; }
+
+.ghost-style {
+  font-family: 'Creepster', cursive; color: #fff;
+  text-shadow: 0 0 10px #fff, 0 0 30px var(--neon-red);
+  letter-spacing: 3px; animation: floatGhost 3s ease-in-out infinite;
+}
+@keyframes floatGhost { 0%,100%{transform:translateY(0); filter:blur(0px);} 50%{transform:translateY(-10px); filter:blur(2px);} }
+.pratik-style {
+  font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 40px;
+  color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue);
+  animation: glitch-skew 0.5s infinite linear alternate-reverse;
+}
+
+.earn-style {
+  font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 60px;
+  color: var(--gold); text-shadow: 0 0 20px var(--gold), 0 0 50px orange;
+  animation: pulseGold 1s infinite alternate;
+}
+@keyframes pulseGold { from{transform:scale(1);} to{transform:scale(1.2);} }
+
+/* --- 3. MAIN HUD (TOP COMPACT) --- */
+.top-panel {
+  position: fixed; top: 10px; left: 0; right: 0;
+  display: flex; justify-content: center; align-items: flex-start;
+  z-index: 2000; pointer-events: none; transition: opacity 0.3s;
+}
+.top-panel.hidden { opacity: 0; pointer-events: none; }
+
+.cyber-card {
+  pointer-events: auto; width: 280px;
+  background: linear-gradient(135deg, rgba(15,0,0,0.98), rgba(5,0,0,0.95));
+  border: 1px solid rgba(255, 0, 0, 0.4);
+  position: relative; padding: 15px;
+  display: flex; flex-direction: column; align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,0,0,0.1);
+  border-radius: 12px;
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+}
+
+.tele-btn {
+  width: 100%; text-decoration: none;
+  background: linear-gradient(90deg, #0088cc, #005f73);
+  padding: 8px; border-radius: 6px;
+  color: #fff; font-size: 12px; font-weight: 800; letter-spacing: 1px;
+  text-align: center; margin-bottom: 8px;
+  border: 1px solid #00aaff;
+  box-shadow: 0 0 10px rgba(0, 136, 204, 0.4);
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  animation: pulseTele 2s infinite;
+}
+@keyframes pulseTele { 50% { box-shadow: 0 0 20px rgba(0, 136, 204, 0.6); } }
+
+#canvas-mini-holo {
+  position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
+  width: 100px; height: 100px; z-index: 0; pointer-events: none;
+}
+
+.status-bar {
+  width: 100%; display: flex; justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-bottom: 8px;
+  font-size: 10px; color: #888; letter-spacing: 1px;
+}
+
+.info-row {
+  display: flex; justify-content: space-between; width: 100%; gap: 5px;
+  margin-bottom: 10px; z-index: 2;
+}
+.period-badge {
+  background: rgba(255, 0, 0, 0.1); border: 1px solid var(--neon-red);
+  color: var(--neon-red); padding: 4px 8px; font-weight: 700; font-size: 11px;
+  border-radius: 4px; flex: 1; text-align: center;
+}
+.timer-badge {
+  background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-blue);
+  color: var(--neon-blue); padding: 4px 8px; font-weight: 700; font-size: 11px;
+  border-radius: 4px; font-family: 'Share Tech Mono'; min-width: 45px; text-align: center;
+}
+
+.sight-area {
+  width: 90px; height: 90px; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 5px; cursor: pointer; z-index: 5;
+}
+.ring-1 {
+  position: absolute; width: 100%; height: 100%;
+  border: 2px dashed rgba(255, 49, 49, 0.6); border-radius: 50%;
+  animation: spin 8s linear infinite;
+}
+.ring-2 {
+  position: absolute; width: 75%; height: 75%;
+  border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 50%;
+  border-left-color: transparent; border-right-color: transparent;
+  animation: spinRev 4s linear infinite;
+}
+.sight-text {
+  font-size: 11px; color: #fff; font-weight: 900; letter-spacing: 1px;
+  text-shadow: 0 0 5px #000; animation: pulse 2s infinite;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes spinRev { 100% { transform: rotate(-360deg); } }
+@keyframes pulse { 50% { opacity: 0.5; } }
+
+.result-box {
+  display: none; width: 100%; text-align: center; z-index: 5;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);border-radius: 6px; padding: 8px; border: 1px solid #333;
+}
+.res-title {
+  font-size: 28px; font-weight: 900; letter-spacing: 2px;
+  margin-bottom: 5px; position: relative;
+  text-shadow: 1px 0 var(--neon-red), -1px 0 var(--neon-blue);
+  animation: glitch-skew 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); } 20% { transform: skew(-10deg); } 40% { transform: skew(10deg); }
+  60% { transform: skew(-5deg); } 80% { transform: skew(5deg); } 100% { transform: skew(0deg); }
+}
+.res-nums { display: flex; justify-content: center; gap: 5px; }
+.num-pill { 
+  background: #000; border: 1px solid var(--neon-green); color: var(--neon-green);
+  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  font-family: 'Share Tech Mono'; font-weight: bold; font-size: 16px;
+  box-shadow: 0 0 5px rgba(10, 255, 10, 0.2);
+}
+.num-pill.rolling { animation: rollNum 0.1s infinite; color: #fff; border-color: #fff; }
+@keyframes rollNum { 0% { transform: translateY(-2px); } 100% { transform: translateY(2px); } }
+
+/* --- BIG/SMALL RESULT STYLES --- */
+.res-bigsmall {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-top: 8px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-family: 'Share Tech Mono';
+}
+.big-text {
+  color: #ff3131;
+  text-shadow: 0 0 10px #ff3131;
+  border: 1px solid #ff3131;
+  background: rgba(255, 49, 49, 0.1);
+}
+.small-text {
+  color: #00f3ff;
+  text-shadow: 0 0 10px #00f3ff;
+  border: 1px solid #00f3ff;
+  background: rgba(0, 243, 255, 0.1);
+}
+
+/* --- 4. FLOATING SKULL --- */
+.float-btn {
+  position: fixed; top: 150px; left: 85%;
+  width: 55px; height: 55px; 
+  background: radial-gradient(circle at 30% 30%, #500000, #000);
+  border: 2px solid var(--neon-red); 
+  border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+  font-size: 26px; cursor: grab; z-index: 6000;
+  box-shadow: 0 0 15px var(--neon-red), inset 0 0 10px rgba(255, 0, 0, 0.5);
+  animation: skullPulse 2s infinite ease-in-out;
+  touch-action: none; user-select: none;
+}
+.float-btn::before {
+    content: ''; position: absolute; inset: -4px;
+    border: 2px dashed #ff3131; border-radius: 50%;
+    border-left-color: transparent; border-right-color: transparent;
+    animation: spinSkullRing 4s linear infinite;
+}
+@keyframes skullPulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px var(--neon-red); }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px var(--neon-red); }
+    100% { transform: scale(1); box-shadow: 0 0 10px var(--neon-red); }
+}
+@keyframes spinSkullRing { 100% { transform: rotate(360deg); } }
+.float-btn:active { cursor: grabbing; animation: none; transform: scale(0.9); }
+
+.game-layer { position: fixed; inset: 0; z-index: 1; background: #000; }
+iframe { width: 100%; height: 100%; border: 0; }
+</style>
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div id="startScreen">
+  <div id="canvas-start"></div>
+  <div class="start-ui">
+    <div class="hack-title">VIP DRK MATRIX</div>
+    <button class="init-btn" id="startBtn">START SYSTEM</button>
+    <!-- FULL SCREEN TERMINAL -->
+    <div class="log-box" id="terminal"></div>
+  </div>
+</div>
+
+<!-- GHOST INTRO -->
+<div id="intro-layer">
+    <div id="intro-text" class="intro-text"></div>
+</div>
+
+<!-- TOP PANEL -->
+<div class="top-panel hidden" id="panel">
+  <div class="cyber-card">
+    <a href="https://t.me/+qju2SP9NqJFiYThl" target="_blank" class="tele-btn">
+       🚀 JOIN VIP CHANNEL
+    </a>
+    <div id="canvas-mini-holo"></div> 
+    <div class="status-bar">
+      <span>SERVER: SIKKIM</span>
+      <span style="color:var(--neon-green)">● SYNCED</span>
+    </div>
+    <div class="info-row">
+        <div class="period-badge" id="periodTxt">P: LOADING...</div>
+        <div class="timer-badge" id="timerTxt">00</div>
+    </div>
+    <div class="sight-area" id="sightBtn">
+      <div class="ring-1"></div>
+      <div class="ring-2"></div>
+      <div class="sight-text">TAP TO HACK</div>
+    </div>
+    <div class="result-box" id="resultArea">
+      <div class="res-title" id="resText">--</div>
+      <div class="res-nums">
+        <div class="num-pill" id="n1">0</div>
+        <div class="num-pill" id="n2">0</div>
+        <div class="num-pill" id="n3">0</div>
+      </div>
+      <!-- BIG/SMALL RESULT -->
+      <div class="res-bigsmall" id="bigSmallText"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SKULL BUTTON -->
+<div class="float-btn" id="toggle">💀</div>
+
+<div class="game-layer">
+  <iframe src="https://www.amarclub1.com/#/register?invitationCode=355351467089" allowfullscreen></iframe>
+</div>
+
+<script>
+// --- AUDIO ENGINE ---
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// Force Load Voices
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = function() {
+        console.log("Voices loaded");
+    };
+}
+
+function speak(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.pitch = 0.5; utter.rate = 0.8; utter.volume = 1;
+        const voices = window.speechSynthesis.getVoices();
+        const preferred = voices.find(v => v.name.includes("Google US English") || v.name.includes("David"));
+        if(preferred) utter.voice = preferred;
+        window.speechSynthesis.speak(utter);
+    }
+}
+
+function sfx(type) {
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    if(type === 'type') {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800+Math.random()*200, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.01, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.05);
+        osc.start(); osc.stop(audioCtx.currentTime+0.05);
+    } else if(type === 'ghost') {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime+2);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime+2);
+        osc.start(); osc.stop(audioCtx.currentTime+2);
+    } else if(type === 'glitch') {
+        osc.type = 'square'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        osc.start(); osc.stop(audioCtx.currentTime+0.2);
+    } else if(type === 'silent') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(0, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        osc.start(); osc.stop(audioCtx.currentTime+0.1);
+    }
+    osc.connect(gain); gain.connect(audioCtx.destination);
+}
+
+// --- DRAGGABLE SKULL ---
+const dragBtn = document.getElementById('toggle');
+const panel = document.getElementById('panel');
+let isDragging = false;
+let startX, startY, initialLeft, initialTop;
+let isPanelVisible = true;
+
+dragBtn.addEventListener('touchstart', (e) => {
+    isDragging = false;
+    const touch = e.touches[0];
+    startX = touch.clientX; startY = touch.clientY;
+    const rect = dragBtn.getBoundingClientRect();
+    initialLeft = rect.left; initialTop = rect.top;
+}, {passive: false});
+
+dragBtn.addEventListener('touchmove', (e) => {
+    e.preventDefault(); 
+    const touch = e.touches[0];
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) isDragging = true;
+    if (isDragging) {
+        let newLeft = initialLeft + dx;
+        let newTop = initialTop + dy;
+        const maxLeft = window.innerWidth - dragBtn.offsetWidth;
+        const maxTop = window.innerHeight - dragBtn.offsetHeight;
+        newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+        newTop = Math.max(0, Math.min(newTop, maxTop));
+        dragBtn.style.left = newLeft + 'px';
+        dragBtn.style.top = newTop + 'px';
+        dragBtn.style.right = 'auto';
+    }
+}, {passive: false});
+
+dragBtn.addEventListener('touchend', (e) => {
+    if (!isDragging) { togglePanel(); }
+    isDragging = false;
+});
+dragBtn.addEventListener('mousedown', (e) => {
+    isDragging = false;
+    startX = e.clientX; startY = e.clientY;
+    const rect = dragBtn.getBoundingClientRect();
+    initialLeft = rect.left; initialTop = rect.top;
+    const onMove = (mm) => {
+        const dx = mm.clientX - startX; const dy = mm.clientY - startY;
+        if(Math.abs(dx)>2 || Math.abs(dy)>2) isDragging = true;if(isDragging) {
+            dragBtn.style.left = (initialLeft + dx) + 'px';
+            dragBtn.style.top = (initialTop + dy) + 'px';
+        }
+    }
+    const onUp = () => {
+        if(!isDragging) togglePanel();
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+});
+
+function togglePanel() {
+    if(isPanelVisible) { panel.classList.add('hidden'); isPanelVisible = false; } 
+    else { panel.classList.remove('hidden'); isPanelVisible = true; }
+}
+
+// --- 3D ENGINE (Start Screen Graphics) ---
+let startRenderer, miniRenderer, miniMesh;
+function initStartEarth() {
+    const container = document.getElementById('canvas-start');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+    startRenderer = new THREE.WebGLRenderer({alpha:true, antialias:true});
+    startRenderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(startRenderer.domElement);
+    
+    // 1. Earth
+    const geo = new THREE.IcosahedronGeometry(4, 2);
+    const mat = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true, transparent: true, opacity: 0.3});
+    const globe = new THREE.Mesh(geo, mat);
+    scene.add(globe);
+    
+    // 2. Core
+    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(2,1), new THREE.MeshBasicMaterial({color:0xff3131, wireframe:true}));
+    globe.add(core);
+
+    // 3. Particles (Stars)
+    const starsGeo = new THREE.BufferGeometry();
+    const starsCount = 800;
+    const posArray = new Float32Array(starsCount * 3);
+    for(let i=0; i<starsCount*3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 40; // Spread out
+    }
+    starsGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const starsMat = new THREE.PointsMaterial({size: 0.05, color: 0xffffff, transparent: true});
+    const starMesh = new THREE.Points(starsGeo, starsMat);
+    scene.add(starMesh);
+
+    // 4. Rotating Ring
+    const ringGeo = new THREE.TorusGeometry(6, 0.05, 16, 100);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    scene.add(ring);
+
+    camera.position.z = 12;
+
+    function animate() {
+        if(document.getElementById('startScreen').style.display === 'none') return;
+        requestAnimationFrame(animate);
+        globe.rotation.y += 0.002; 
+        core.rotation.x -= 0.005;
+        starMesh.rotation.y += 0.0005;
+        ring.rotation.x += 0.005;
+        ring.rotation.y += 0.005;
+        startRenderer.render(scene, camera);
+    }
+    animate();
+}
+
+function initMiniHolo() {
+    const container = document.getElementById('canvas-mini-holo');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, 100/100, 0.1, 100);
+    miniRenderer = new THREE.WebGLRenderer({alpha:true, antialias:true});
+    miniRenderer.setSize(100, 100);
+    container.appendChild(miniRenderer.domElement);
+    const geo = new THREE.OctahedronGeometry(1.5, 0);
+    const mat = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+    miniMesh = new THREE.Mesh(geo, mat);
+    scene.add(miniMesh);
+    camera.position.z = 5;
+    const animateMini = () => {
+        requestAnimationFrame(animateMini);
+        miniMesh.rotation.y += 0.01; miniMesh.rotation.x += 0.005;
+        miniRenderer.render(scene, camera);
+    };
+    animateMini();
+}
+
+// --- TERMINAL TYPING EFFECT ---
+async function typeTerminal(texts) {
+    const terminal = document.getElementById('terminal');
+    let lineCount = 0;
+    
+    for (let i = 0; i < texts.length; i++) {
+        const log = texts[i];
+        const line = document.createElement('div');
+        line.className = `log-line ${log.c}`;
+        terminal.appendChild(line);
+        
+        for (let j = 0; j < log.t.length; j++) {
+            line.textContent += log.t.charAt(j);
+            sfx('type');
+            await new Promise(resolve => setTimeout(resolve, 20 + Math.random() * 20));
+        }
+        
+        lineCount++;
+        if (lineCount > 15) {
+            terminal.removeChild(terminal.firstChild);
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 300));
+    }
+}
+
+// --- GHOST INTRO SEQUENCE ---
+async function playGhostIntro() {
+    const introLayer = document.getElementById('intro-layer');
+    const introText = document.getElementById('intro-text');
+    
+    introLayer.style.display = 'flex';
+    
+    const sequences = [
+        {text: "WELCOME TO", style: "ghost-style"},
+        {text: "PRATIK'S", style: "pratik-style"},
+        {text: "EARN HUB", style: "earn-style"}
+    ];
+    
+    for (let seq of sequences) {
+        introText.innerHTML = `<span class="${seq.style}">${seq.text}</span>`;
+        introText.style.opacity = 1;
+        sfx('ghost');
+        
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        introText.style.opacity = 0;
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    
+    introLayer.style.opacity = 0;
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    introLayer.style.display = 'none';
+}
+
+// --- GAME LOGIC ---
+let gameTimer = 0;
+let gamePeriod = 1;
+let isRolling = false;
+
+function updateTimer() {
+    gameTimer++;
+    const timerDisplay = document.getElementById('timerTxt');
+    timerDisplay.textContent = gameTimer.toString().padStart(2, '0');
+    
+    if (gameTimer >= 60) {
+        gameTimer = 0;
+        gamePeriod++;
+        document.getElementById('periodTxt').textContent = `P: ${gamePeriod}`;
+        sfx('glitch');
+    }
+}
+
+function generateResult() {
+    const num1 = Math.floor(Math.random() * 10);
+    const num2 = Math.floor(Math.random() * 10);
+    const num3 = Math.floor(Math.random() * 10);
+    
+    const resultText = document.getElementById('resText');
+    const resultArea = document.getElementById('resultArea');
+    const bigSmallText = document.getElementById('bigSmallText');
+    
+    // Calculate sum for BIG/SMALL
+    const sum = num1 + num2 + num3;
+    const isBig = sum >= 14; // 0-13 small, 14-27 big
+    
+    // Set BIG/SMALL text and styling
+    if (isBig) {
+        bigSmallText.textContent = "BIG";
+        bigSmallText.className = "res-bigsmall big-text";
+    } else {
+        bigSmallText.textContent = "SMALL";
+        bigSmallText.className = "res-bigsmall small-text";
+    }
+    
+    // Show rolling animation
+    document.getElementById('n1').classList.add('rolling');
+    document.getElementById('n2').classList.add('rolling');
+    document.getElementById('n3').classList.add('rolling');
+    
+    // Set result text
+    const resultTypes = ["WINNER!", "JACKPOT!", "BIG WIN!", "MEGA WIN!"];
+    resultText.textContent = resultTypes[Math.floor(Math.random() * resultTypes.length)];
+    
+    // Show result area
+    resultArea.style.display = 'block';
+    
+    // Stop rolling after delay
+    setTimeout(() => {
+        document.getElementById('n1').classList.remove('rolling');
+        document.getElementById('n2').classList.remove('rolling');
+        document.getElementById('n3').classList.remove('rolling');
+        
+        document.getElementById('n1').textContent = num1;
+        document.getElementById('n2').textContent = num2;
+        document.getElementById('n3').textContent = num3;
+        
+        // Hide result after 3 seconds
+        setTimeout(() => {
+            resultArea.style.display = 'none';
+            isRolling = false;
+        }, 3000);
+    }, 1000);
+}
+
+// --- START SEQUENCE ---
+document.getElementById('startBtn').addEventListener('click', async () => {
+    // UNLOCK AUDIO
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    sfx('silent');
+    if ('speechSynthesis' in window) window.speechSynthesis.resume();
+    
+    initStartEarth();
+    document.querySelector('.hack-title').style.display = 'none';
+    document.getElementById('startBtn').style.display = 'none';
+    const term = document.getElementById('terminal');
+    term.style.display = 'flex';
+    
+    // MIXED LOGS
+    const logs = [
+        {t:"Syncing WinGo 1M Time...", c:"c-red"}, 
+        {t:"サーバーに接続中 (Connecting)...", c:"c-blue"}, 
+        {t:"正在获取数据 (Fetching Data)...", c:"c-green"}, 
+        {t:"The Matrix Has You...", c:"c-purple"},
+        {t:"Establishing Secure Connection...", c:"c-blue"},
+        {t:"Bypassing Firewall...", c:"c-red"},
+        {t:"Accessing VIP Database...", c:"c-green"},
+        {t:"Decryption Complete...", c:"c-purple"},
+        {t:"Loading 3D Graphics Engine...", c:"c-blue"},
+        {t:"Initializing HUD Interface...", c:"c-green"},
+        {t:"Synchronizing Global Servers...", c:"c-red"},
+        {t:"Connection Established: SIKKIM Server", c:"c-green"},
+        {t:"Welcome to DRK VIP System", c:"c-purple"},
+        {t:"System Ready. Access Granted.", c:"c-green"}
+    ];
+    
+    await typeTerminal(logs);
+    
+    // Hide start screen
+    document.getElementById('startScreen').style.display = 'none';
+    
+    // Play ghost intro
+    await playGhostIntro();
+    
+    // Show UI elements
+    document.getElementById('toggle').style.display = 'flex';
+    document.getElementById('panel').classList.remove('hidden');
+    initMiniHolo();
+    
+    // Start game timer
+    setInterval(updateTimer, 1000);
+    
+    // Speak welcome message
+    setTimeout(() => {
+        speak("Welcome to VIP DRK Matrix. System online. Ready to earn.");
+    }, 1000);
+});
+
+// --- SIGHT BUTTON CLICK ---
+document.getElementById('sightBtn').addEventListener('click', () => {
+    if (!isRolling) {
+        isRolling = true;
+        sfx('glitch');
+        generateResult();
+    }
+});
+
+// --- RESIZE HANDLER ---
+window.addEventListener('resize', () => {
+    if (startRenderer) {
+        startRenderer.setSize(window.innerWidth, window.innerHeight);
+    }
+});
+
+// --- INITIAL VOICE LOAD ---
+window.addEventListener('load', () => {
+    // Trigger voice loading
+    if ('speechSynthesis' in window) {
+        setTimeout(() => {
+            window.speechSynthesis.getVoices();
+        }, 100);
+    }
+});
+</script>
+</body>
+</html>
